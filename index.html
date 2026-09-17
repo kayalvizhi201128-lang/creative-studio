@@ -1,0 +1,2995 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creative Studio</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #08080d;
+    --panel: #111119;
+    --panel2: #181821;
+    --border: #2b2b38;
+    --text: #f5f5f7;
+    --muted: #8b8b98;
+    --accent: #9b7cff;
+    --cyan: #6ee7ff;
+    --danger: #ff5577;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(155,124,255,.14), transparent 28%),
+        radial-gradient(circle at 90% 90%, rgba(110,231,255,.09), transparent 28%),
+        var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.app {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 230px 1fr;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    background: rgba(12,12,18,.96);
+    border-right: 1px solid var(--border);
+    padding: 25px 16px;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+    margin-bottom: 35px;
+}
+
+.logo span {
+    color: var(--accent);
+}
+
+.nav-title {
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 20px 10px 9px;
+}
+
+.nav-btn {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 5px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: transparent;
+    color: #aaaab5;
+    text-align: left;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+    color: white;
+    background: #1b1b25;
+    border-color: #333341;
+}
+
+.nav-btn.active {
+    box-shadow: inset 3px 0 var(--accent);
+}
+
+.sidebar-bottom {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 20px;
+}
+
+.storage {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.storage small {
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.storage-bar {
+    height: 5px;
+    background: #252530;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 9px 0;
+}
+
+.storage-bar div {
+    height: 100%;
+    width: 35%;
+    background: linear-gradient(90deg, var(--accent), var(--cyan));
+}
+
+/* MAIN */
+
+.main {
+    min-width: 0;
+}
+
+.topbar {
+    height: 72px;
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(8,8,13,.8);
+    backdrop-filter: blur(15px);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.page-title h1 {
+    font-size: 20px;
+}
+
+.page-title p {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.top-actions {
+    display: flex;
+    gap: 7px;
+}
+
+.btn {
+    border: 1px solid var(--border);
+    background: var(--panel2);
+    color: white;
+    padding: 9px 13px;
+    border-radius: 8px;
+    transition: .2s;
+}
+
+.btn:hover {
+    border-color: #555566;
+    transform: translateY(-1px);
+}
+
+.btn.primary {
+    background: var(--accent);
+    color: #08080d;
+    border-color: var(--accent);
+    font-weight: bold;
+}
+
+.btn.danger {
+    color: #ff8097;
+}
+
+/* WORKSPACE */
+
+.workspace {
+    padding: 22px;
+}
+
+.view {
+    display: none;
+}
+
+.view.active {
+    display: block;
+}
+
+/* EDITOR */
+
+.studio {
+    display: grid;
+    grid-template-columns: 70px minmax(300px, 1fr) 270px;
+    gap: 15px;
+    min-height: 650px;
+}
+
+/* TOOLBAR */
+
+.toolbar {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 10px 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.tool {
+    width: 54px;
+    height: 44px;
+    margin: auto;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #aaaab5;
+    font-size: 11px;
+}
+
+.tool:hover,
+.tool.active {
+    color: white;
+    background: #20202b;
+    border-color: #393948;
+}
+
+.tool-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 5px 2px;
+}
+
+/* CANVAS */
+
+.canvas-area {
+    min-width: 0;
+    background: #0e0e14;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.canvas-header {
+    height: 52px;
+    padding: 0 15px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.canvas-header span {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.canvas-wrap {
+    flex: 1;
+    min-height: 540px;
+    padding: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+
+    background:
+        linear-gradient(45deg,#15151d 25%,transparent 25%),
+        linear-gradient(-45deg,#15151d 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#15151d 75%),
+        linear-gradient(-45deg,transparent 75%,#15151d 75%);
+    background-size: 24px 24px;
+    background-position:
+        0 0,
+        0 12px,
+        12px -12px,
+        -12px 0;
+}
+
+#canvas {
+    display: block;
+    background: white;
+    box-shadow: 0 15px 50px rgba(0,0,0,.55);
+    max-width: 100%;
+    max-height: 100%;
+    image-rendering: pixelated;
+
+    /* IMPORTANT FOR TOUCH DRAWING */
+    touch-action: none;
+    user-select: none;
+}
+
+.canvas-footer {
+    border-top: 1px solid var(--border);
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+/* PROPERTIES */
+
+.properties {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.panel-section {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-section h3 {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+}
+
+.control {
+    margin-bottom: 15px;
+}
+
+.control label {
+    color: var(--muted);
+    font-size: 10px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+}
+
+input[type="color"] {
+    width: 100%;
+    height: 40px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--panel2);
+    padding: 3px;
+}
+
+select,
+.text-input {
+    width: 100%;
+    padding: 9px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: var(--panel2);
+    color: white;
+    outline: none;
+}
+
+.control-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+}
+
+.control-grid .btn {
+    font-size: 10px;
+}
+
+.pixel-info {
+    color: var(--muted);
+    background: #181821;
+    border: 1px solid #2d2d3a;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+/* PROJECTS */
+
+.projects-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.projects-head h2 {
+    font-size: 24px;
+}
+
+.projects-head p {
+    color: var(--muted);
+    margin-top: 5px;
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+    gap: 15px;
+}
+
+.project-card {
+    overflow: hidden;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+}
+
+.project-preview {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #181820;
+}
+
+.project-preview img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+.project-info {
+    padding: 13px;
+}
+
+.project-info h3 {
+    font-size: 14px;
+}
+
+.project-info p {
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.6;
+    margin: 5px 0 12px;
+}
+
+.project-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.project-actions button {
+    flex: 1;
+    font-size: 10px;
+}
+
+/* ANIMATION */
+
+.animation-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 15px;
+}
+
+.animation-preview {
+    min-height: 550px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.animation-screen {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(45deg,#15151d 25%,transparent 25%),
+        linear-gradient(-45deg,#15151d 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#15151d 75%),
+        linear-gradient(-45deg,transparent 75%,#15151d 75%);
+    background-size: 24px 24px;
+}
+
+#animationCanvas {
+    width: min(600px,80%);
+    background: white;
+    image-rendering: pixelated;
+}
+
+.animation-controls {
+    padding: 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.frames {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 15px;
+}
+
+.frames h3 {
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+
+.frame-list {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 8px;
+}
+
+.frame {
+    background: #181820;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.frame.active {
+    border-color: var(--accent);
+}
+
+.frame img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: contain;
+    background: white;
+    display: block;
+}
+
+.frame span {
+    display: block;
+    text-align: center;
+    padding: 5px;
+    color: var(--muted);
+    font-size: 9px;
+}
+
+/* MODAL */
+
+.modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.72);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(5px);
+}
+
+.modal-bg.show {
+    display: flex;
+}
+
+.modal {
+    width: min(420px,90%);
+    background: #111118;
+    border: 1px solid #393946;
+    border-radius: 15px;
+    padding: 22px;
+}
+
+.modal h2 {
+    margin-bottom: 7px;
+}
+
+.modal p {
+    color: var(--muted);
+    font-size: 11px;
+    margin-bottom: 18px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 7px;
+    margin-top: 15px;
+}
+
+/* TOAST */
+
+.toast {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    background: #191920;
+    border: 1px solid #3b3b49;
+    border-radius: 9px;
+    padding: 12px 16px;
+    font-size: 11px;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: .3s;
+    z-index: 200;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1050px) {
+
+    .studio {
+        grid-template-columns: 65px 1fr;
+    }
+
+    .properties {
+        display: none;
+    }
+
+    .animation-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width:750px) {
+
+    .app {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .workspace {
+        padding: 10px;
+    }
+
+    .studio {
+        grid-template-columns: 1fr;
+    }
+
+    .toolbar {
+        flex-direction: row;
+        overflow-x: auto;
+        min-height: 62px;
+    }
+
+    .tool {
+        min-width: 54px;
+    }
+
+    .canvas-wrap {
+        min-height: 420px;
+        padding: 12px;
+    }
+
+    .topbar {
+        padding: 0 12px;
+    }
+
+    .top-actions .btn:not(.primary) {
+        display: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar">
+
+    <div class="logo">
+        Creative<span>Studio</span>
+    </div>
+
+    <div class="nav-title">Workspace</div>
+
+    <button class="nav-btn active" data-view="editor">
+        Editor
+    </button>
+
+    <button class="nav-btn" data-view="projects">
+        My Projects
+    </button>
+
+    <button class="nav-btn" data-view="animation">
+        Animation
+    </button>
+
+    <div class="nav-title">Tools</div>
+
+    <button class="nav-btn" id="newProjectNav">
+        New Canvas
+    </button>
+
+    <button class="nav-btn" id="exportNav">
+        Export PNG
+    </button>
+
+    <div class="sidebar-bottom">
+        <div class="storage">
+            <small>Local Storage</small>
+
+            <div class="storage-bar">
+                <div></div>
+            </div>
+
+            <small id="storageText">
+                0 saved projects
+            </small>
+        </div>
+    </div>
+
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+
+    <div class="page-title">
+
+        <h1 id="pageTitle">
+            Editor
+        </h1>
+
+        <p id="projectStatus">
+            Untitled artwork
+        </p>
+
+    </div>
+
+    <div class="top-actions">
+
+        <button class="btn" id="undoBtn">
+            Undo
+        </button>
+
+        <button class="btn" id="redoBtn">
+            Redo
+        </button>
+
+        <button class="btn" id="clearBtn">
+            Clear
+        </button>
+
+        <button class="btn primary" id="saveBtn">
+            Save Project
+        </button>
+
+    </div>
+
+</header>
+
+<section class="workspace">
+
+<!-- EDITOR -->
+
+<div class="view active" id="editorView">
+
+<div class="studio">
+
+<!-- TOOLBAR -->
+
+<div class="toolbar">
+
+<button class="tool active" data-tool="brush">
+    Brush
+</button>
+
+<button class="tool" data-tool="eraser">
+    Eraser
+</button>
+
+<button class="tool" data-tool="line">
+    Line
+</button>
+
+<button class="tool" data-tool="rectangle">
+    Rect
+</button>
+
+<button class="tool" data-tool="circle">
+    Circle
+</button>
+
+<div class="tool-divider"></div>
+
+<button class="tool" id="pixelMode">
+    Pixel
+</button>
+
+<button class="tool" id="fillCanvas">
+    Fill
+</button>
+
+<button class="tool" id="eyedropper">
+    Pick
+</button>
+
+</div>
+
+<!-- CANVAS -->
+
+<div class="canvas-area">
+
+<div class="canvas-header">
+
+<span id="canvasSizeLabel">
+800 × 600
+</span>
+
+<span id="toolLabel">
+Brush Tool
+</span>
+
+</div>
+
+<div class="canvas-wrap">
+
+<canvas
+    id="canvas"
+    width="800"
+    height="600">
+</canvas>
+
+</div>
+
+<div class="canvas-footer">
+
+<span id="coordinates">
+X: 0 Y: 0
+</span>
+
+<span>
+Creative Studio Canvas
+</span>
+
+</div>
+
+</div>
+
+<!-- PROPERTIES -->
+
+<aside class="properties">
+
+<div class="panel-section">
+
+<h3>Brush</h3>
+
+<div class="control">
+
+<label>
+<span>Color</span>
+<span id="colorValue">#9B7CFF</span>
+</label>
+
+<input
+    type="color"
+    id="colorPicker"
+    value="#9b7cff">
+
+</div>
+
+<div class="control">
+
+<label>
+<span>Size</span>
+<span id="sizeValue">12px</span>
+</label>
+
+<input
+    type="range"
+    id="brushSize"
+    min="1"
+    max="100"
+    value="12">
+
+</div>
+
+<div class="control">
+
+<label>
+<span>Opacity</span>
+<span id="opacityValue">100%</span>
+</label>
+
+<input
+    type="range"
+    id="opacity"
+    min="10"
+    max="100"
+    value="100">
+
+</div>
+
+</div>
+
+<div class="panel-section">
+
+<h3>Canvas</h3>
+
+<div class="control">
+
+<label>
+Background
+</label>
+
+<select id="backgroundSelect">
+
+<option value="white">
+White
+</option>
+
+<option value="black">
+Black
+</option>
+
+<option value="transparent">
+Transparent
+</option>
+
+</select>
+
+</div>
+
+<div class="control">
+
+<label>
+Canvas Size
+</label>
+
+<select id="canvasSize">
+
+<option value="800x600">
+800 × 600
+</option>
+
+<option value="600x600">
+600 × 600
+</option>
+
+<option value="500x500">
+500 × 500
+</option>
+
+<option value="400x400">
+400 × 400
+</option>
+
+<option value="320x240">
+320 × 240
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="panel-section">
+
+<h3>Quick Colors</h3>
+
+<div class="control-grid">
+
+<button class="btn colorBtn" data-color="#ffffff">
+White
+</button>
+
+<button class="btn colorBtn" data-color="#000000">
+Black
+</button>
+
+<button class="btn colorBtn" data-color="#9b7cff">
+Purple
+</button>
+
+<button class="btn colorBtn" data-color="#6ee7ff">
+Cyan
+</button>
+
+<button class="btn colorBtn" data-color="#ff5577">
+Pink
+</button>
+
+<button class="btn colorBtn" data-color="#ffe66d">
+Yellow
+</button>
+
+</div>
+
+</div>
+
+<div class="panel-section">
+
+<h3>Pixel Mode</h3>
+
+<div class="pixel-info">
+Pixel mode snaps your drawing to a grid for pixel-art creation.
+</div>
+
+</div>
+
+</aside>
+
+</div>
+
+</div>
+
+<!-- PROJECTS -->
+
+<div class="view" id="projectsView">
+
+<div class="projects-head">
+
+<div>
+
+<h2>
+My Projects
+</h2>
+
+<p>
+Your saved Creative Studio artwork.
+</p>
+
+</div>
+
+<button class="btn primary" id="createProjectBtn">
+New Project
+</button>
+
+</div>
+
+<div
+    class="project-grid"
+    id="projectGrid">
+</div>
+
+</div>
+
+<!-- ANIMATION -->
+
+<div class="view" id="animationView">
+
+<div class="animation-layout">
+
+<div class="animation-preview">
+
+<div class="canvas-header">
+
+<span>
+Animation Preview
+</span>
+
+<span id="frameCounter">
+Frame 1 / 1
+</span>
+
+</div>
+
+<div class="animation-screen">
+
+<canvas
+    id="animationCanvas"
+    width="800"
+    height="600">
+</canvas>
+
+</div>
+
+<div class="animation-controls">
+
+<button class="btn" id="previousFrame">
+Previous
+</button>
+
+<button class="btn primary" id="playAnimation">
+Play
+</button>
+
+<button class="btn" id="nextFrame">
+Next
+</button>
+
+<button class="btn" id="addFrame">
+Add Frame
+</button>
+
+</div>
+
+</div>
+
+<div class="frames">
+
+<h3>
+Frames
+</h3>
+
+<div
+    class="frame-list"
+    id="frameList">
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+<!-- SAVE MODAL -->
+
+<div class="modal-bg" id="saveModal">
+
+<div class="modal">
+
+<h2>
+Save Project
+</h2>
+
+<p>
+Give your artwork a name. It will be saved in this browser.
+</p>
+
+<input
+    class="text-input"
+    id="projectName"
+    placeholder="My artwork">
+
+<div class="modal-actions">
+
+<button class="btn" id="cancelSave">
+Cancel
+</button>
+
+<button class="btn primary" id="confirmSave">
+Save Project
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+/* ==========================================
+   CANVAS
+========================================== */
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+let currentTool = "brush";
+let drawing = false;
+
+let startX = 0;
+let startY = 0;
+
+let color = "#9b7cff";
+let brushSize = 12;
+let opacity = 1;
+let pixelMode = false;
+
+let undoStack = [];
+let redoStack = [];
+
+let frames = [];
+let currentFrame = 0;
+
+let animationTimer = null;
+
+
+/* ==========================================
+   INITIAL CANVAS
+========================================== */
+
+function fillBackground(type) {
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    if (type === "white") {
+
+        ctx.fillStyle = "#ffffff";
+
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+    }
+
+    if (type === "black") {
+
+        ctx.fillStyle = "#000000";
+
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+    }
+}
+
+fillBackground("white");
+
+
+/* ==========================================
+   GET POINTER POSITION
+
+   This works with:
+   Mouse
+   Touch
+   Stylus
+========================================== */
+
+function getPointerPosition(event) {
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+    let x =
+        (event.clientX - rect.left) *
+        canvas.width /
+        rect.width;
+
+    let y =
+        (event.clientY - rect.top) *
+        canvas.height /
+        rect.height;
+
+    if (pixelMode) {
+
+        const gridSize = 10;
+
+        x =
+            Math.floor(x / gridSize) *
+            gridSize +
+            gridSize / 2;
+
+        y =
+            Math.floor(y / gridSize) *
+            gridSize +
+            gridSize / 2;
+    }
+
+    return {
+        x,
+        y
+    };
+}
+
+
+/* ==========================================
+   SAVE CANVAS FOR UNDO
+========================================== */
+
+function saveCanvasState() {
+
+    undoStack.push(
+        canvas.toDataURL()
+    );
+
+    if (undoStack.length > 30) {
+        undoStack.shift();
+    }
+
+    redoStack = [];
+}
+
+
+/* ==========================================
+   RESTORE IMAGE
+========================================== */
+
+function restoreImage(data) {
+
+    const image = new Image();
+
+    image.onload = function() {
+
+        ctx.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+        ctx.drawImage(
+            image,
+            0,
+            0
+        );
+    };
+
+    image.src = data;
+}
+
+
+/* ==========================================
+   DRAWING SETTINGS
+========================================== */
+
+function setupBrush() {
+
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    ctx.lineWidth = brushSize;
+    ctx.globalAlpha = opacity;
+
+    if (currentTool === "eraser") {
+
+        ctx.globalCompositeOperation =
+            "destination-out";
+
+    } else {
+
+        ctx.globalCompositeOperation =
+            "source-over";
+
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+    }
+}
+
+
+/* ==========================================
+   RESET CONTEXT
+========================================== */
+
+function resetContext() {
+
+    ctx.globalAlpha = 1;
+
+    ctx.globalCompositeOperation =
+        "source-over";
+}
+
+
+/* ==========================================
+   DRAW POINT
+========================================== */
+
+function drawPoint(x, y) {
+
+    setupBrush();
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x,
+        y,
+        Math.max(brushSize / 2, 1),
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+    resetContext();
+}
+
+
+/* ==========================================
+   DRAW LINE
+========================================== */
+
+function drawLine(x1, y1, x2, y2) {
+
+    setupBrush();
+
+    ctx.beginPath();
+
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+
+    ctx.stroke();
+
+    resetContext();
+}
+
+
+/* ==========================================
+   DRAW SHAPE
+========================================== */
+
+function drawShape(
+    type,
+    x1,
+    y1,
+    x2,
+    y2
+) {
+
+    ctx.globalCompositeOperation =
+        "source-over";
+
+    ctx.globalAlpha = opacity;
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = brushSize;
+
+    ctx.beginPath();
+
+    if (type === "line") {
+
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+    }
+
+    if (type === "rectangle") {
+
+        ctx.rect(
+            x1,
+            y1,
+            x2 - x1,
+            y2 - y1
+        );
+    }
+
+    if (type === "circle") {
+
+        const radius =
+            Math.sqrt(
+                Math.pow(x2 - x1, 2) +
+                Math.pow(y2 - y1, 2)
+            );
+
+        ctx.arc(
+            x1,
+            y1,
+            radius,
+            0,
+            Math.PI * 2
+        );
+    }
+
+    ctx.stroke();
+
+    resetContext();
+}
+
+
+/* ==========================================
+   POINTER DOWN
+
+   MAIN FIX
+========================================== */
+
+canvas.addEventListener(
+    "pointerdown",
+    function(event) {
+
+        event.preventDefault();
+
+        drawing = true;
+
+        canvas.setPointerCapture(
+            event.pointerId
+        );
+
+        const position =
+            getPointerPosition(event);
+
+        startX = position.x;
+        startY = position.y;
+
+        saveCanvasState();
+
+        if (
+            currentTool === "brush" ||
+            currentTool === "eraser"
+        ) {
+
+            drawPoint(
+                startX,
+                startY
+            );
+        }
+    }
+);
+
+
+/* ==========================================
+   POINTER MOVE
+
+   MAIN FIX
+========================================== */
+
+canvas.addEventListener(
+    "pointermove",
+    function(event) {
+
+        event.preventDefault();
+
+        const position =
+            getPointerPosition(event);
+
+        document.getElementById(
+            "coordinates"
+        ).textContent =
+            `X: ${Math.round(position.x)} Y: ${Math.round(position.y)}`;
+
+        if (!drawing) {
+            return;
+        }
+
+        if (
+            currentTool === "brush" ||
+            currentTool === "eraser"
+        ) {
+
+            drawLine(
+                startX,
+                startY,
+                position.x,
+                position.y
+            );
+
+            startX = position.x;
+            startY = position.y;
+        }
+    }
+);
+
+
+/* ==========================================
+   POINTER UP
+========================================== */
+
+canvas.addEventListener(
+    "pointerup",
+    function(event) {
+
+        event.preventDefault();
+
+        if (!drawing) {
+            return;
+        }
+
+        const position =
+            getPointerPosition(event);
+
+        if (currentTool === "line") {
+
+            drawShape(
+                "line",
+                startX,
+                startY,
+                position.x,
+                position.y
+            );
+        }
+
+        if (currentTool === "rectangle") {
+
+            drawShape(
+                "rectangle",
+                startX,
+                startY,
+                position.x,
+                position.y
+            );
+        }
+
+        if (currentTool === "circle") {
+
+            drawShape(
+                "circle",
+                startX,
+                startY,
+                position.x,
+                position.y
+            );
+        }
+
+        drawing = false;
+
+        try {
+            canvas.releasePointerCapture(
+                event.pointerId
+            );
+        } catch {}
+    }
+);
+
+
+/* ==========================================
+   POINTER CANCEL
+========================================== */
+
+canvas.addEventListener(
+    "pointercancel",
+    function() {
+
+        drawing = false;
+    }
+);
+
+
+/* ==========================================
+   TOOL SELECTION
+========================================== */
+
+document
+.querySelectorAll(".tool[data-tool]")
+.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        function() {
+
+            document
+            .querySelectorAll(
+                ".tool[data-tool]"
+            )
+            .forEach(item => {
+
+                item.classList.remove(
+                    "active"
+                );
+            });
+
+            button.classList.add(
+                "active"
+            );
+
+            currentTool =
+                button.dataset.tool;
+
+            document.getElementById(
+                "toolLabel"
+            ).textContent =
+                button.textContent.trim()
+                + " Tool";
+        }
+    );
+});
+
+
+/* ==========================================
+   COLOR
+========================================== */
+
+document
+.getElementById("colorPicker")
+.addEventListener(
+    "input",
+    function(event) {
+
+        color = event.target.value;
+
+        document.getElementById(
+            "colorValue"
+        ).textContent =
+            color.toUpperCase();
+    }
+);
+
+
+/* ==========================================
+   BRUSH SIZE
+========================================== */
+
+document
+.getElementById("brushSize")
+.addEventListener(
+    "input",
+    function(event) {
+
+        brushSize =
+            Number(event.target.value);
+
+        document.getElementById(
+            "sizeValue"
+        ).textContent =
+            brushSize + "px";
+    }
+);
+
+
+/* ==========================================
+   OPACITY
+========================================== */
+
+document
+.getElementById("opacity")
+.addEventListener(
+    "input",
+    function(event) {
+
+        opacity =
+            Number(event.target.value) / 100;
+
+        document.getElementById(
+            "opacityValue"
+        ).textContent =
+            event.target.value + "%";
+    }
+);
+
+
+/* ==========================================
+   QUICK COLORS
+========================================== */
+
+document
+.querySelectorAll(".colorBtn")
+.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        function() {
+
+            color =
+                button.dataset.color;
+
+            document.getElementById(
+                "colorPicker"
+            ).value = color;
+
+            document.getElementById(
+                "colorValue"
+            ).textContent =
+                color.toUpperCase();
+        }
+    );
+});
+
+
+/* ==========================================
+   PIXEL MODE
+========================================== */
+
+document
+.getElementById("pixelMode")
+.addEventListener(
+    "click",
+    function() {
+
+        pixelMode =
+            !pixelMode;
+
+        this.classList.toggle(
+            "active",
+            pixelMode
+        );
+
+        showToast(
+            pixelMode
+                ? "Pixel mode enabled"
+                : "Pixel mode disabled"
+        );
+    }
+);
+
+
+/* ==========================================
+   FILL CANVAS
+========================================== */
+
+document
+.getElementById("fillCanvas")
+.addEventListener(
+    "click",
+    function() {
+
+        saveCanvasState();
+
+        ctx.globalCompositeOperation =
+            "source-over";
+
+        ctx.globalAlpha = opacity;
+
+        ctx.fillStyle = color;
+
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+        resetContext();
+
+        showToast(
+            "Canvas filled"
+        );
+    }
+);
+
+
+/* ==========================================
+   EYEDROPPER
+========================================== */
+
+document
+.getElementById("eyedropper")
+.addEventListener(
+    "click",
+    function() {
+
+        showToast(
+            "Click the canvas to pick a color"
+        );
+
+        function pickColor(event) {
+
+            const position =
+                getPointerPosition(event);
+
+            const pixel =
+                ctx.getImageData(
+                    position.x,
+                    position.y,
+                    1,
+                    1
+                ).data;
+
+            const picked =
+                "#" +
+                [pixel[0], pixel[1], pixel[2]]
+                .map(value =>
+                    value
+                    .toString(16)
+                    .padStart(2, "0")
+                )
+                .join("");
+
+            color = picked;
+
+            document.getElementById(
+                "colorPicker"
+            ).value = picked;
+
+            document.getElementById(
+                "colorValue"
+            ).textContent =
+                picked.toUpperCase();
+
+            canvas.removeEventListener(
+                "pointerdown",
+                pickColor
+            );
+
+            currentTool = "brush";
+
+            document
+            .querySelectorAll(
+                ".tool[data-tool]"
+            )
+            .forEach(item =>
+                item.classList.remove(
+                    "active"
+                )
+            );
+
+            document
+            .querySelector(
+                '[data-tool="brush"]'
+            )
+            .classList.add("active");
+
+            showToast(
+                "Color picked"
+            );
+        }
+
+        canvas.addEventListener(
+            "pointerdown",
+            pickColor,
+            { once: true }
+        );
+    }
+);
+
+
+/* ==========================================
+   CANVAS SIZE
+========================================== */
+
+document
+.getElementById("canvasSize")
+.addEventListener(
+    "change",
+    function(event) {
+
+        const [
+            width,
+            height
+        ] =
+            event.target.value
+            .split("x")
+            .map(Number);
+
+        const oldCanvas =
+            document.createElement(
+                "canvas"
+            );
+
+        oldCanvas.width =
+            canvas.width;
+
+        oldCanvas.height =
+            canvas.height;
+
+        oldCanvas
+        .getContext("2d")
+        .drawImage(
+            canvas,
+            0,
+            0
+        );
+
+        canvas.width = width;
+        canvas.height = height;
+
+        ctx.clearRect(
+            0,
+            0,
+            width,
+            height
+        );
+
+        ctx.drawImage(
+            oldCanvas,
+            0,
+            0,
+            width,
+            height
+        );
+
+        document.getElementById(
+            "canvasSizeLabel"
+        ).textContent =
+            `${width} × ${height}`;
+
+        showToast(
+            "Canvas resized"
+        );
+    }
+);
+
+
+/* ==========================================
+   BACKGROUND
+========================================== */
+
+document
+.getElementById("backgroundSelect")
+.addEventListener(
+    "change",
+    function(event) {
+
+        const type =
+            event.target.value;
+
+        saveCanvasState();
+
+        if (type === "transparent") {
+
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+            return;
+        }
+
+        fillBackground(type);
+    }
+);
+
+
+/* ==========================================
+   UNDO
+========================================== */
+
+document
+.getElementById("undoBtn")
+.addEventListener(
+    "click",
+    undo
+);
+
+function undo() {
+
+    if (undoStack.length === 0) {
+
+        showToast(
+            "Nothing to undo"
+        );
+
+        return;
+    }
+
+    redoStack.push(
+        canvas.toDataURL()
+    );
+
+    restoreImage(
+        undoStack.pop()
+    );
+
+    showToast("Undo");
+}
+
+
+/* ==========================================
+   REDO
+========================================== */
+
+document
+.getElementById("redoBtn")
+.addEventListener(
+    "click",
+    redo
+);
+
+function redo() {
+
+    if (redoStack.length === 0) {
+
+        showToast(
+            "Nothing to redo"
+        );
+
+        return;
+    }
+
+    undoStack.push(
+        canvas.toDataURL()
+    );
+
+    restoreImage(
+        redoStack.pop()
+    );
+
+    showToast("Redo");
+}
+
+
+/* ==========================================
+   CLEAR
+========================================== */
+
+document
+.getElementById("clearBtn")
+.addEventListener(
+    "click",
+    function() {
+
+        saveCanvasState();
+
+        ctx.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+        showToast(
+            "Canvas cleared"
+        );
+    }
+);
+
+
+/* ==========================================
+   EXPORT PNG
+========================================== */
+
+function exportPNG() {
+
+    const link =
+        document.createElement("a");
+
+    link.download =
+        "creative-studio-artwork.png";
+
+    link.href =
+        canvas.toDataURL(
+            "image/png"
+        );
+
+    link.click();
+
+    showToast(
+        "PNG exported"
+    );
+}
+
+document
+.getElementById("exportNav")
+.addEventListener(
+    "click",
+    exportPNG
+);
+
+
+/* ==========================================
+   NAVIGATION
+========================================== */
+
+document
+.querySelectorAll(
+    ".nav-btn[data-view]"
+)
+.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        function() {
+
+            const target =
+                button.dataset.view;
+
+            document
+            .querySelectorAll(
+                ".nav-btn"
+            )
+            .forEach(item =>
+                item.classList.remove(
+                    "active"
+                )
+            );
+
+            button.classList.add(
+                "active"
+            );
+
+            document
+            .querySelectorAll(
+                ".view"
+            )
+            .forEach(view =>
+                view.classList.remove(
+                    "active"
+                )
+            );
+
+            document
+            .getElementById(
+                target + "View"
+            )
+            .classList.add("active");
+
+            const titles = {
+                editor: "Editor",
+                projects: "My Projects",
+                animation: "Animation"
+            };
+
+            document.getElementById(
+                "pageTitle"
+            ).textContent =
+                titles[target];
+
+            if (target === "projects") {
+                renderProjects();
+            }
+
+            if (target === "animation") {
+                renderFrames();
+            }
+        }
+    );
+});
+
+
+/* ==========================================
+   NEW CANVAS
+========================================== */
+
+function newCanvas() {
+
+    canvas.width = 800;
+    canvas.height = 600;
+
+    fillBackground("white");
+
+    undoStack = [];
+    redoStack = [];
+
+    document.getElementById(
+        "canvasSize"
+    ).value = "800x600";
+
+    document.getElementById(
+        "canvasSizeLabel"
+    ).textContent =
+        "800 × 600";
+
+    document.getElementById(
+        "projectStatus"
+    ).textContent =
+        "Untitled artwork";
+
+    showToast(
+        "New canvas created"
+    );
+}
+
+document
+.getElementById("newProjectNav")
+.addEventListener(
+    "click",
+    newCanvas
+);
+
+document
+.getElementById("createProjectBtn")
+.addEventListener(
+    "click",
+    function() {
+
+        newCanvas();
+
+        document
+        .querySelector(
+            '[data-view="editor"]'
+        )
+        .click();
+    }
+);
+
+
+/* ==========================================
+   SAVE PROJECT
+========================================== */
+
+const saveModal =
+    document.getElementById(
+        "saveModal"
+    );
+
+document
+.getElementById("saveBtn")
+.addEventListener(
+    "click",
+    function() {
+
+        document.getElementById(
+            "projectName"
+        ).value = "";
+
+        saveModal.classList.add(
+            "show"
+        );
+
+        document.getElementById(
+            "projectName"
+        ).focus();
+    }
+);
+
+document
+.getElementById("cancelSave")
+.addEventListener(
+    "click",
+    function() {
+
+        saveModal.classList.remove(
+            "show"
+        );
+    }
+);
+
+document
+.getElementById("confirmSave")
+.addEventListener(
+    "click",
+    saveProject
+);
+
+function saveProject() {
+
+    let name =
+        document
+        .getElementById(
+            "projectName"
+        )
+        .value.trim();
+
+    if (!name) {
+        name = "Untitled Artwork";
+    }
+
+    const projects =
+        JSON.parse(
+            localStorage.getItem(
+                "creativeStudioProjects"
+            ) || "[]"
+        );
+
+    const project = {
+
+        id: Date.now(),
+
+        name: name,
+
+        width: canvas.width,
+
+        height: canvas.height,
+
+        image:
+            canvas.toDataURL(
+                "image/png"
+            ),
+
+        created:
+            new Date()
+            .toLocaleString()
+    };
+
+    projects.unshift(project);
+
+    localStorage.setItem(
+        "creativeStudioProjects",
+        JSON.stringify(projects)
+    );
+
+    document.getElementById(
+        "projectStatus"
+    ).textContent =
+        name;
+
+    saveModal.classList.remove(
+        "show"
+    );
+
+    updateStorageText();
+
+    showToast(
+        "Project saved successfully"
+    );
+}
+
+
+/* ==========================================
+   RENDER PROJECTS
+========================================== */
+
+function renderProjects() {
+
+    const grid =
+        document.getElementById(
+            "projectGrid"
+        );
+
+    const projects =
+        JSON.parse(
+            localStorage.getItem(
+                "creativeStudioProjects"
+            ) || "[]"
+        );
+
+    grid.innerHTML = "";
+
+    if (projects.length === 0) {
+
+        grid.innerHTML = `
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>No projects yet</h3>
+                    <p>Create artwork and save it here.</p>
+                </div>
+            </div>
+        `;
+
+        return;
+    }
+
+    projects.forEach(project => {
+
+        const card =
+            document.createElement(
+                "div"
+            );
+
+        card.className =
+            "project-card";
+
+        card.innerHTML = `
+
+            <div class="project-preview">
+
+                <img
+                    src="${project.image}"
+                    alt="Artwork">
+
+            </div>
+
+            <div class="project-info">
+
+                <h3>
+                    ${escapeHTML(project.name)}
+                </h3>
+
+                <p>
+                    ${project.width} × ${project.height}
+                    <br>
+                    ${project.created}
+                </p>
+
+                <div class="project-actions">
+
+                    <button class="btn load-project">
+                        Open
+                    </button>
+
+                    <button class="btn danger delete-project">
+                        Delete
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        card
+        .querySelector(
+            ".load-project"
+        )
+        .addEventListener(
+            "click",
+            function() {
+
+                loadProject(project);
+
+                document
+                .querySelector(
+                    '[data-view="editor"]'
+                )
+                .click();
+            }
+        );
+
+        card
+        .querySelector(
+            ".delete-project"
+        )
+        .addEventListener(
+            "click",
+            function() {
+
+                deleteProject(
+                    project.id
+                );
+            }
+        );
+
+        grid.appendChild(card);
+    });
+}
+
+
+/* ==========================================
+   LOAD PROJECT
+========================================== */
+
+function loadProject(project) {
+
+    canvas.width =
+        project.width;
+
+    canvas.height =
+        project.height;
+
+    const image =
+        new Image();
+
+    image.onload =
+        function() {
+
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+            ctx.drawImage(
+                image,
+                0,
+                0
+            );
+
+            document.getElementById(
+                "canvasSizeLabel"
+            ).textContent =
+                `${project.width} × ${project.height}`;
+
+            document.getElementById(
+                "projectStatus"
+            ).textContent =
+                project.name;
+        };
+
+    image.src =
+        project.image;
+
+    showToast(
+        "Project opened"
+    );
+}
+
+
+/* ==========================================
+   DELETE PROJECT
+========================================== */
+
+function deleteProject(id) {
+
+    const projects =
+        JSON.parse(
+            localStorage.getItem(
+                "creativeStudioProjects"
+            ) || "[]"
+        );
+
+    const updated =
+        projects.filter(
+            project =>
+                project.id !== id
+        );
+
+    localStorage.setItem(
+        "creativeStudioProjects",
+        JSON.stringify(updated)
+    );
+
+    renderProjects();
+
+    updateStorageText();
+
+    showToast(
+        "Project deleted"
+    );
+}
+
+
+/* ==========================================
+   ANIMATION
+========================================== */
+
+function captureCurrentFrame() {
+
+    return canvas.toDataURL(
+        "image/png"
+    );
+}
+
+function createInitialFrame() {
+
+    frames = [
+        captureCurrentFrame()
+    ];
+
+    currentFrame = 0;
+
+    renderFrames();
+}
+
+createInitialFrame();
+
+
+/* ==========================================
+   RENDER FRAMES
+========================================== */
+
+function renderFrames() {
+
+    const list =
+        document.getElementById(
+            "frameList"
+        );
+
+    list.innerHTML = "";
+
+    document.getElementById(
+        "frameCounter"
+    ).textContent =
+        `Frame ${currentFrame + 1} / ${frames.length}`;
+
+    frames.forEach(
+        (imageData, index) => {
+
+            const frame =
+                document.createElement(
+                    "div"
+                );
+
+            frame.className =
+                "frame" +
+                (
+                    index === currentFrame
+                        ? " active"
+                        : ""
+                );
+
+            frame.innerHTML = `
+
+                <img
+                    src="${imageData}"
+                    alt="Frame">
+
+                <span>
+                    Frame ${index + 1}
+                </span>
+            `;
+
+            frame.addEventListener(
+                "click",
+                function() {
+
+                    currentFrame =
+                        index;
+
+                    displayAnimationFrame();
+
+                    renderFrames();
+                }
+            );
+
+            list.appendChild(frame);
+        }
+    );
+
+    displayAnimationFrame();
+}
+
+
+/* ==========================================
+   DISPLAY ANIMATION FRAME
+========================================== */
+
+function displayAnimationFrame() {
+
+    if (!frames[currentFrame]) {
+        return;
+    }
+
+    const image =
+        new Image();
+
+    image.onload =
+        function() {
+
+            const animationCanvas =
+                document.getElementById(
+                    "animationCanvas"
+                );
+
+            const animationCtx =
+                animationCanvas
+                .getContext("2d");
+
+            animationCtx.clearRect(
+                0,
+                0,
+                animationCanvas.width,
+                animationCanvas.height
+            );
+
+            animationCtx.drawImage(
+                image,
+                0,
+                0,
+                animationCanvas.width,
+                animationCanvas.height
+            );
+        };
+
+    image.src =
+        frames[currentFrame];
+}
+
+
+/* ==========================================
+   ADD FRAME
+========================================== */
+
+document
+.getElementById("addFrame")
+.addEventListener(
+    "click",
+    function() {
+
+        frames.push(
+            captureCurrentFrame()
+        );
+
+        currentFrame =
+            frames.length - 1;
+
+        renderFrames();
+
+        showToast(
+            "Frame added"
+        );
+    }
+);
+
+
+/* ==========================================
+   PREVIOUS FRAME
+========================================== */
+
+document
+.getElementById("previousFrame")
+.addEventListener(
+    "click",
+    function() {
+
+        if (currentFrame > 0) {
+
+            currentFrame--;
+
+        } else {
+
+            currentFrame =
+                frames.length - 1;
+        }
+
+        renderFrames();
+    }
+);
+
+
+/* ==========================================
+   NEXT FRAME
+========================================== */
+
+document
+.getElementById("nextFrame")
+.addEventListener(
+    "click",
+    function() {
+
+        if (
+            currentFrame <
+            frames.length - 1
+        ) {
+
+            currentFrame++;
+
+        } else {
+
+            currentFrame = 0;
+        }
+
+        renderFrames();
+    }
+);
+
+
+/* ==========================================
+   PLAY ANIMATION
+========================================== */
+
+document
+.getElementById("playAnimation")
+.addEventListener(
+    "click",
+    function() {
+
+        const button =
+            document.getElementById(
+                "playAnimation"
+            );
+
+        if (animationTimer) {
+
+            clearInterval(
+                animationTimer
+            );
+
+            animationTimer = null;
+
+            button.textContent =
+                "Play";
+
+            return;
+        }
+
+        button.textContent =
+            "Stop";
+
+        animationTimer =
+            setInterval(
+                function() {
+
+                    currentFrame++;
+
+                    if (
+                        currentFrame >=
+                        frames.length
+                    ) {
+
+                        currentFrame = 0;
+                    }
+
+                    displayAnimationFrame();
+
+                    document.getElementById(
+                        "frameCounter"
+                    ).textContent =
+                        `Frame ${currentFrame + 1} / ${frames.length}`;
+
+                },
+                180
+            );
+    }
+);
+
+
+/* ==========================================
+   STORAGE INFO
+========================================== */
+
+function updateStorageText() {
+
+    const projects =
+        JSON.parse(
+            localStorage.getItem(
+                "creativeStudioProjects"
+            ) || "[]"
+        );
+
+    document.getElementById(
+        "storageText"
+    ).textContent =
+        `${projects.length} saved project${
+            projects.length === 1
+                ? ""
+                : "s"
+        }`;
+}
+
+updateStorageText();
+
+
+/* ==========================================
+   TOAST
+========================================== */
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+    toast.textContent =
+        message;
+
+    toast.classList.add(
+        "show"
+    );
+
+    clearTimeout(
+        window.toastTimer
+    );
+
+    window.toastTimer =
+        setTimeout(
+            function() {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2200
+        );
+}
+
+
+/* ==========================================
+   HTML ESCAPE
+========================================== */
+
+function escapeHTML(value) {
+
+    return value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+/* ==========================================
+   KEYBOARD SHORTCUTS
+========================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.ctrlKey &&
+            event.key.toLowerCase() === "z"
+        ) {
+
+            event.preventDefault();
+
+            undo();
+        }
+
+        if (
+            event.ctrlKey &&
+            event.key.toLowerCase() === "y"
+        ) {
+
+            event.preventDefault();
+
+            redo();
+        }
+
+        if (
+            event.ctrlKey &&
+            event.key.toLowerCase() === "s"
+        ) {
+
+            event.preventDefault();
+
+            document
+            .getElementById("saveBtn")
+            .click();
+        }
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            saveModal.classList.remove(
+                "show"
+            );
+        }
+    }
+);
+
+</script>
+
+</body>
+</html>
+```
+
